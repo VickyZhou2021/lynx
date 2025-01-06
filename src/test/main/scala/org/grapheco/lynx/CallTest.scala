@@ -257,6 +257,17 @@ class CallTest extends TestBase {
   def testTanh(): Unit ={
     Assertions.assertEquals(LynxFloat(0.46211715726000974), runOnDemoGraph(s"return tanh(0.5) as value").records().next()("value"))
   }
+  @Test
+  def testComplexQueryWithAggregation(): Unit = {
+    runOnDemoGraph("CREATE (a:person {name: 'John', age: 25}), (b:person {name: 'Alice', age: 30}), (c:person {name: 'Bob', age: 35}), (d:person {name: 'Charlie', age: 40})")
+    runOnDemoGraph("MATCH (a:person), (b:person) WHERE a.name <> b.name CREATE (a)-[:KNOWS]->(b)")
+
+    val rs = runOnDemoGraph("MATCH (n:person)-[:KNOWS]->() RETURN avg(n.age) AS avg_age, max(n.age) AS max_age, min(n.age) AS min_age").records().next()
+    Assertions.assertEquals(LynxFloat(32.5), rs("avg_age"))
+    Assertions.assertEquals(LynxInteger(40), rs("max_age"))
+    Assertions.assertEquals(LynxInteger(25), rs("min_age"))
+  }
+
   // String Functions
   @Test
   def testLeft(): Unit ={
@@ -338,3 +349,5 @@ class CallTest extends TestBase {
     Assertions.assertEquals(false, runOnDemoGraph("Match p = ()-[:NOT_KNOW]-() return length(p);").records().hasNext)
   }
 }
+
+
