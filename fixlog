@@ -1,7 +1,16 @@
-1.引入自动化格式工具Scalafmt
- -- 添加 Scalafmt 插件到 SBT
- -- 配置 Scalafmt
- -- 将 Scalafmt 集成到 CI/CD
-2.更新throw信息，提供更详细的错误信息，指出是 Map 中缺少哪些关键信息导致无法解析
+新增函数支持, 修改了一系列函数实现
+修复collect(n)返回结果丢失n类型, 返回Any的问题
+完善functions文档
+调整项目结构, 目前拆分types
+完善了Duration和Time
 
-小组成员：zwt、lls
+
+TODO List:
+1. 优化器改进：完善基于成本的优化器，包括动态规划算法，成本因子估算，基数估计等。在https://github.com/HC-teemo/lynx/tree/CBO这个仓库中完成了一部分。
+2. 物理计划算子完善：补充和拆分现有的物理计划类型，例如NodeScan可进一步拆分细化NodeSeekByID，NodeSeekByIndex，AllNode等，这有助于优化器对计划进行更细粒度的调整和重写。
+3. DataFrame改进：
+  3.1 完善DataFrame的操作，改进性能
+  3.2 基于如Apache Arrow等统一内存格式实现新的DataFrame
+4. 优化规则：
+  4.1 改进规则引擎：目前优化规则的表达过于复杂，可设计新的规则引擎简化规则表达
+  4.2 规则完善：增加常见的优化规则
